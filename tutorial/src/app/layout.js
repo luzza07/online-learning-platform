@@ -11,6 +11,7 @@ import GoogleAnalytics from "./components/googleanalytics";
 
 import "./globals.css";
 import { ThemeProviderWrapper } from "./context/ThemeContext";
+import BasicPopover from "./components/popover";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -52,6 +53,7 @@ export default function RootLayout({ children, params }) {
             <Grid container spacing={2}>
               <Grid item size={{ md: 12, sm: 12 }}>
                 {children}
+                <BasicPopover />
               </Grid>
             </Grid>
           </Grid>
