@@ -1,48 +1,57 @@
-"use client"; // Mark this as a Client Component
+"use client";
 
 import React, { useState } from "react";
+import axios from "axios";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const predefinedResponses = {
-    hello: "Hi there! How can I assist you today?",
-    "what is c programming":
-      "C programming is a general-purpose, procedural computer programming language. It was designed by Dennis Ritchie at Bell Labs in the 1970s.",
-    "what is python":
-      "Python is an interpreted, high-level, general-purpose programming language. It's widely used for web development, data analysis, machine learning, and more.",
-    "what is js":
-      "JavaScript is a versatile programming language that enables you to create dynamic and interactive content on websites.",
-    "what is react":
-      "React is a JavaScript library for building user interfaces, especially single-page applications where you need a fast, interactive user experience.",
-  };
-
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     const userMessage = { role: "user", content: input };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-
     setIsLoading(true);
 
-    // Simulate AI response with a delay
-    setTimeout(() => {
-      const response =
-        predefinedResponses[input.toLowerCase()] ||
-        "Sorry, I don't have an answer for that.";
-      const assistantMessage = { role: "assistant", content: response };
-      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
-      setIsLoading(false);
-    }, 1000);
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-3.5-turbo", // You can change this to gpt-4 if needed
+          messages: [{ role: "user", content: input }],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    setInput(""); // Clear input field after sending
+      const botResponse = response.data.choices[0].message.content;
+
+      const assistantMessage = { role: "assistant", content: botResponse };
+      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+    } catch (error) {
+      console.error("Error fetching OpenAI response:", error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          role: "assistant",
+          content: "Sorry, I couldn't process your request.",
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+      setInput("");
+    }
   };
 
   return (
@@ -58,7 +67,6 @@ export default function Chatbot() {
         backgroundColor: "#f9f9f9",
       }}
     >
-      {/* Chat Header */}
       <div
         style={{
           padding: "10px",
@@ -71,7 +79,6 @@ export default function Chatbot() {
         Chatbot
       </div>
 
-      {/* Chat Messages */}
       <div
         style={{
           flex: 1,
@@ -118,22 +125,6 @@ export default function Chatbot() {
             >
               {message.content}
             </div>
-            {message.role === "user" && (
-              <div
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "50%",
-                  backgroundColor: "#007bff",
-                  marginLeft: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                👤
-              </div>
-            )}
           </div>
         ))}
         {isLoading && (
@@ -153,7 +144,6 @@ export default function Chatbot() {
         )}
       </div>
 
-      {/* Input Area */}
       <form
         onSubmit={handleSubmit}
         style={{

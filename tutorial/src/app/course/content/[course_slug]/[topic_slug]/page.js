@@ -1,9 +1,12 @@
 import CourseContentDetailPage from "./coursecontentpage";
-import axiosInstance from "@/app/utility/tools";
+import axiosInstance from "../../../../utility/tools";
+import { use } from "react";
 
 export async function generateMetadata({ params, searchParams }, parent) {
-  // Retrieve route parameters
-  const course_slug = params.course_slug;
+  // Properly await or use the params
+  // Since this is a server component function, we can use await
+  const paramsData = await params;
+  const course_slug = paramsData.course_slug;
 
   // Fetch SEO data for the course
   const course_seo = (await axiosInstance.get(`/seo/detail/${course_slug}`))
@@ -36,10 +39,13 @@ export async function generateMetadata({ params, searchParams }, parent) {
 }
 
 export default function CourseContentPage({ params }) {
+  // Use React.use() since this is a client component using params
+  const unwrappedParams = use(params);
+  
   return (
     <CourseContentDetailPage
-      courseSlug={params.course_slug}
-      topicSlug={params.topic_slug}
+      courseSlug={unwrappedParams.course_slug}
+      topicSlug={unwrappedParams.topic_slug}
     />
   );
 }

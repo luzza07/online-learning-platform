@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
- 
   Typography,
   Stack,
   Avatar,
   Card,
- 
   Skeleton,
   CardActionArea,
   useTheme,
@@ -49,8 +47,14 @@ export default function CourseList() {
     <>
       <Head>
         <title>Explore Our Courses - Enhance Your Learning</title>
-        <meta name="description" content="Discover a variety of courses designed to enhance your skills and knowledge. Browse our collection and start learning today!" />
-        <meta name="keywords" content="online courses, education, learning platform, skill development" />
+        <meta
+          name="description"
+          content="Discover a variety of courses designed to enhance your skills and knowledge. Browse our collection and start learning today!"
+        />
+        <meta
+          name="keywords"
+          content="online courses, education, learning platform, skill development"
+        />
         <meta name="author" content="EzExplanation" />
       </Head>
       <Container maxWidth="lg" sx={{ py: 8, minHeight: "100vh" }}>
@@ -62,7 +66,10 @@ export default function CourseList() {
                 sx={{
                   textAlign: "center",
                   mb: 6,
-                  fontWeight: 900,
+                  fontWeight: 700,
+                  fontFamily: "'Roboto', sans-serif",
+                  color: theme.palette.primary.main,
+                  textTransform: "uppercase",
                   background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -88,7 +95,7 @@ export default function CourseList() {
                       <Skeleton
                         variant="rounded"
                         width="100%"
-                        height={120}
+                        height={220}
                         animation="wave"
                       />
                     ) : (
@@ -97,15 +104,12 @@ export default function CourseList() {
                           <Card
                             sx={{
                               position: "relative",
+                              borderRadius: 10,
                               overflow: "hidden",
-                              borderRadius: 4,
-                              transition: "all 0.3s ease",
+                              transition: "transform 0.3s ease, box-shadow 0.3s ease",
                               "&:hover": {
-                                transform: "translateY(-8px)",
-                                boxShadow: theme.shadows[8],
-                                "& .course-gradient": {
-                                  opacity: 1,
-                                },
+                                transform: "translateY(-12px)",
+                                boxShadow: theme.shadows[10],
                               },
                             }}
                           >
@@ -129,13 +133,14 @@ export default function CourseList() {
                                   direction="row"
                                   spacing={3}
                                   alignItems="center"
+                                  sx={{ display: "flex", alignItems: "center" }}
                                 >
                                   <Avatar
                                     src={`https://ezexplanation.com/${course.logo}`}
                                     alt={course.title}
                                     sx={{
-                                      width: 80,
-                                      height: 80,
+                                      width: 90,
+                                      height: 90,
                                       bgcolor: theme.palette.primary.main,
                                       "&:hover": {
                                         transform: "rotate(15deg)",
@@ -151,27 +156,13 @@ export default function CourseList() {
                                       variant="h6"
                                       component="h3"
                                       sx={{
-                                        fontWeight: 700,
+                                        fontWeight: 600,
                                         color: theme.palette.text.primary,
+                                        textTransform: "capitalize",
                                       }}
                                     >
                                       {course.title}
                                     </Typography>
-                                    <Typography
-                                      variant="body2"
-                                      color="text.secondary"
-                                      sx={{
-                                        display: "-webkit-box",
-                                        WebkitLineClamp: 2,
-                                        WebkitBoxOrient: "vertical",
-                                        overflow: "hidden",
-                                      }}
-                                      dangerouslySetInnerHTML={{
-                                        __html:
-                                          course.description ||
-                                          "Explore this comprehensive course",
-                                      }}
-                                    />
                                   </Stack>
                                 </Stack>
                               </CardActionArea>

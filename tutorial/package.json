@@ -19,11 +19,15 @@
     "axios": "^1.7.9",
     "dompurify": "^3.2.3",
     "framer-motion": "^12.4.1",
-    "next": "^15.1.7",
+    "next": "^15.2.0",
     "prismjs": "^1.29.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^7.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.8",
+    "typescript": "5.7.3"
   }
 }
