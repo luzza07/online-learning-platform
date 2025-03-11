@@ -1,22 +1,24 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Button,
+  MenuItem,
+  Box,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTheme } from "@mui/material/styles"; // ✅ Import MUI theme hook
+import { useTheme } from "@mui/material/styles";
 import axiosInstance from "../utility/tools";
 import ThemeToggle from "./ThemeToggle";
 
@@ -28,32 +30,31 @@ const pageLinks = [
 ];
 
 export default function BaseAppBar() {
-  const theme = useTheme(); // ✅ Get current theme
+  const theme = useTheme();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [courseDestinations, setCourseDestinations] = useState({});
   const router = useRouter();
 
-  // Fetch courses and map titles to destinations
-  const fetchCourses = async () => {
-    try {
-      const response = await axiosInstance.get("/list/subjects/");
-      const courses = response.data;
-
-      const mapping = {};
-      courses.forEach((course) => {
-        if (course.is_active) {
-          mapping[course.title.toLowerCase()] = `/course/${course.slug}`;
-        }
-      });
-
-      setCourseDestinations(mapping);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axiosInstance.get("/list/subjects/");
+        const courses = response.data;
+
+        const mapping = {};
+        courses.forEach((course) => {
+          if (course.is_active) {
+            mapping[course.title.toLowerCase()] = `/course/${course.slug}`;
+          }
+        });
+
+        setCourseDestinations(mapping);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
     fetchCourses();
   }, []);
 
@@ -64,118 +65,66 @@ export default function BaseAppBar() {
   const handleSearchSubmit = () => {
     if (searchQuery.trim() !== "") {
       const query = searchQuery.trim().toLowerCase();
-
-      // Fuzzy match: Find the first course that includes the query in its title
       const matchedCourse = Object.entries(courseDestinations).find(([title]) =>
         title.includes(query)
       );
 
-      if (matchedCourse) {
-        const [, destination] = matchedCourse;
-        router.push(destination); // Navigate to the matched course page
-      } else {
-        router.push(`/search?query=${encodeURIComponent(searchQuery)}`); // Default search page
-      }
+      router.push(
+        matchedCourse
+          ? matchedCourse[1]
+          : `/search?query=${encodeURIComponent(searchQuery)}`
+      );
     }
-  };
-
-  const handleNavMenuOpen = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleNavMenuClose = () => {
-    setAnchorElNav(null);
   };
 
   return (
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: theme.palette.background.default, // ✅ Dynamic background color
-        color: theme.palette.text.primary, // ✅ Dynamic text color
-        boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1)",
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          {/* Logo and EasyExplanation */}
-          <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+          {/* Logo - Aligned to the Left */}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link href="/">
               <img
                 src="/logo/logo.jpg"
                 alt="Logo"
                 style={{
-                  width: 50,
-                  height: 50,
-                  marginRight: 12,
+                  width: 45,
+                  height: 45,
+                  marginRight: 10,
+                  borderRadius: "50%",
                   cursor: "pointer",
+                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
                 }}
               />
             </Link>
             <Typography
               variant="h6"
-              noWrap
               component="a"
               href="/"
               sx={{
-                fontWeight: "bold",
-                color: theme.palette.text.primary, // ✅ Dynamic text color
+                fontWeight: 700,
+                color: theme.palette.text.primary,
                 textDecoration: "none",
-                letterSpacing: 1.2,
+                letterSpacing: 1,
               }}
             >
               EasyExplanation
             </Typography>
           </Box>
 
-          {/* Mobile Menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="navigation menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleNavMenuOpen}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleNavMenuClose}
-              sx={{ display: { xs: "block", md: "none" } }}
-            >
-              {pages.map((page, index) => (
-                <MenuItem
-                  key={page}
-                  onClick={() => {
-                    handleNavMenuClose();
-                    router.push(pageLinks[index]);
-                  }}
-                >
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          {/* Desktop Menu */}
+          {/* Desktop Navigation - Centered */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
-              justifyContent: "center",
               flexGrow: 1,
+              justifyContent: "center",
             }}
           >
             {pages.map((page, index) => (
@@ -183,18 +132,19 @@ export default function BaseAppBar() {
                 key={page}
                 onClick={() => router.push(pageLinks[index])}
                 sx={{
-                  my: 2,
-                  color: theme.palette.text.primary, // ✅ Dynamic text color
-                  fontWeight: "medium",
+                  mx: 2,
+                  color: theme.palette.text.primary,
+                  fontWeight: 500,
                   fontSize: "1rem",
-                  marginLeft: 2,
-                  marginRight: 2,
                   textTransform: "none",
+                  borderRadius: "8px",
+                  padding: "6px 16px",
+                  transition: "background-color 0.3s",
                   "&:hover": {
                     backgroundColor:
                       theme.palette.mode === "light"
                         ? "rgba(0, 0, 0, 0.05)"
-                        : "rgba(255, 255, 255, 0.1)", // ✅ Different hover effect for dark mode
+                        : "rgba(255, 255, 255, 0.1)",
                   },
                 }}
               >
@@ -203,8 +153,9 @@ export default function BaseAppBar() {
             ))}
           </Box>
 
-          {/* Search Bar */}
-          <Box sx={{ display: "flex", justifyContent: "flex-end", flexGrow: 0 }}>
+          {/* Search Bar & Theme Toggle - Aligned to the Right */}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {/* Search Bar */}
             <TextField
               variant="outlined"
               size="small"
@@ -215,28 +166,32 @@ export default function BaseAppBar() {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <SearchIcon sx={{ color: theme.palette.text.secondary }} />
                   </InputAdornment>
                 ),
               }}
               sx={{
                 backgroundColor:
                   theme.palette.mode === "light"
-                    ? "#f5f5f5"
-                    : "rgba(255, 255, 255, 0.1)", // ✅ Dynamic background for search bar
-                borderRadius: 2,
-                width: { xs: "100%", sm: "300px" },
+                    ? "#f0f0f0"
+                    : "rgba(255, 255, 255, 0.1)",
+                borderRadius: "8px",
+                width: { xs: "100%", sm: "260px" },
+                marginRight: 2,
                 "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: theme.palette.divider,
+                  },
                   "&:hover fieldset": {
-                    borderColor: theme.palette.divider, // ✅ Dynamic border color
+                    borderColor: theme.palette.text.secondary,
                   },
                 },
               }}
             />
-          </Box>
 
-          {/* Theme Toggle */}
-          <ThemeToggle />
+            {/* Theme Toggle */}
+            <ThemeToggle />
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

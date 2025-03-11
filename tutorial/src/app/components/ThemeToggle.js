@@ -1,14 +1,14 @@
-import { Switch, FormControlLabel } from '@mui/material';
-import { useThemeContext } from '../context/ThemeContext';
+import { IconButton } from "@mui/material";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
+import { useThemeContext } from "../context/ThemeContext";
 
 function ThemeToggle() {
   const { themeMode, toggleTheme } = useThemeContext();
 
   return (
-    <FormControlLabel
-      control={<Switch checked={themeMode === 'dark'} onChange={toggleTheme} />}
-      label="Dark Mode"
-    />
+    <IconButton onClick={toggleTheme} color="inherit">
+      {themeMode === "dark" ? <Brightness7 /> : <Brightness4 />}
+    </IconButton>
   );
 }
 

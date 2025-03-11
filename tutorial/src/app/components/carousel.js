@@ -8,13 +8,13 @@ const slogans = [
     slogan: "Empowering Knowledge, One Step at a Time",
     tagline:
       "Unlock your potential with expert-led tutorials designed for every skill level.",
-    image: "/background/image1.jpg", // Replace with the actual image path
+    image: "/background/image1.png", // Replace with the actual image path
   },
   {
     slogan: "Learn, Build, and Grow Your Skills",
     tagline:
       "From basics to advanced, turn ideas into mastery with hands-on learning.",
-    image: "/background/image2.jpg", // Replace with the actual image path
+    image: "/background/image2.png", // Replace with the actual image path
   },
 ];
 
