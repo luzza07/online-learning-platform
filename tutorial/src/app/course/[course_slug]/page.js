@@ -1,52 +1,53 @@
 import CourseContentPage from "./coursecontent";
-import axiosInstance from "@/app/utility/tools";
+// Keep the import in case we need it later
+import axiosInstance from "../../utility/tools";
 
-// ✅ Ensure params.course_slug is awaited correctly
 export async function generateMetadata({ params }) {
   try {
-    if (!params?.course_slug) throw new Error("Missing course_slug");
+    const resolvedParams = await params;
+    
+    if (!resolvedParams?.course_slug) {
+      throw new Error("Missing course_slug");
+    }
 
-    // Fetch SEO data for the course
-    const response = await axiosInstance.get(`/seo/detail/${params.course_slug}`);
-    const course_seo = response.data;
-
-    // ✅ Ensure course_seo exists before using its properties
+    const course_slug = resolvedParams.course_slug;
+    
+    // Use the course_slug to generate metadata without API call
     return {
-      title: course_seo?.title
-        ? `${course_seo.title} | Easy Explanation online web tutorials`
-        : "Easy Explanation online web tutorials",
-      description: course_seo?.meta_description || "Explore comprehensive computer science tutorials and programming resources...",
-      keywords: course_seo?.keywords || "computer science tutorials, programming languages, coding tutorials...",
+      title: `${course_slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} | EzExplanation`,
+      keywords: "computer science tutorials, programming languages, coding tutorials, ezexplanation",
       openGraph: {
-        url: course_seo ? `/topic/${params.course_slug}` : "https://ezexplanation.com",
-        title: course_seo?.title || "EzExplanation Computer Engineering Web Tutorial",
-        description: course_seo?.meta_description || "Explore comprehensive computer science tutorials and programming resources...",
-        image: course_seo?.logo ? `/media/${course_seo.logo}` : "https://yt3.googleusercontent.com/u-7NgX9EATY6VnW6w2Ux0bRlkeEi8-IdUZujnrOwRj6nGc6RRd3aK45mcDK958okYu5kTmnK7Q=s900-c-k-c0x00ffffff-no-rj",
+        url: `/course/${course_slug}`,
+        title: `${course_slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} | EzExplanation`,
+        description: "Explore comprehensive computer science tutorials and programming resources with EzExplanation.",
+        image: "https://yt3.googleusercontent.com/u-7NgX9EATY6VnW6w2Ux0bRlkeEi8-IdUZujnrOwRj6nGc6RRd3aK45mcDK958okYu5kTmnK7Q=s900-c-k-c0x00ffffff-no-rj",
       },
     };
   } catch (error) {
-    console.error("Error fetching SEO data:", error.message);
+    console.error("Error in generateMetadata:", error.message);
 
-    // ✅ Fallback metadata for API failures or missing slug
+    // Fallback metadata for any errors
     return {
-      title: "Course Not Found | Easy Explanation online web tutorials",
-      description: "The requested course could not be found or is currently unavailable. Explore our tutorials and resources to enhance your skills.",
-      keywords: "404, course not found, Easy Explanation, tutorials, programming",
+      
+      title: "Course | Easy Explanation online web tutorials",
+      description: "Explore our tutorials and resources to enhance your skills.",
+      keywords: "Easy Explanation, tutorials, programming",
       openGraph: {
         url: "https://ezexplanation.com",
-        title: "Course Not Found",
-        description: "The requested course could not be found or is currently unavailable. Explore our tutorials and resources to enhance your skills.",
+        title: "Easy Explanation Tutorials",
+        description: "Explore our tutorials and resources to enhance your skills.",
         image: "https://yt3.googleusercontent.com/u-7NgX9EATY6VnW6w2Ux0bRlkeEi8-IdUZujnrOwRj6nGc6RRd3aK45mcDK958okYu5kTmnK7Q=s900-c-k-c0x00ffffff-no-rj",
       },
     };
   }
 }
 
-// ✅ Ensure params.course_slug is checked before rendering
-export default function CoursePage({ params }) {
-  if (!params?.course_slug) {
-    return <div>Loading...</div>; // ✅ Show a loading state if slug is missing
+export default async function CoursePage({ params }) {
+  const resolvedParams = await params;
+  
+  if (!resolvedParams?.course_slug) {
+    return <div>Loading...</div>;
   }
 
-  return <CourseContentPage courseSlug={params.course_slug} />;
+  return <CourseContentPage courseSlug={resolvedParams.course_slug} />;
 }

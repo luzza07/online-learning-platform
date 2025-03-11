@@ -10,7 +10,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import axiosInstance from "@/app/utility/tools";
+import axiosInstance from "../../../../utility/tools";
 // _app.js
 import Prism from "prismjs";
 import "prismjs/themes/prism.css"; // Choose another theme if you prefer

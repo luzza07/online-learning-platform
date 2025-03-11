@@ -1,7 +1,7 @@
 import React from "react";
 import localFont from "next/font/local";
 import BaseAppBar from "./components/baseAppbar";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
 import Head from "next/head";
@@ -38,28 +38,29 @@ export const metadata = {
 
 export default function RootLayout({ children, params }) {
   return (
-    <html lang="en">
-      <GoogleAnalytics />
-
-      <ThemeProviderWrapper>
+    <ThemeProviderWrapper>
+      <html lang="en">
+        <GoogleAnalytics />
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <AdBanner />
           <Grid container spacing={2} rowSpacing={4}>
-            <Grid size={12} marginBottom={6}>
+            <Grid item xs={12} sx={{ marginBottom: 6 }}>
               <Box>
                 <BaseAppBar />
               </Box>
             </Grid>
-            <Grid container spacing={2}>
-              <Grid item size={{ md: 12, sm: 12 }}>
-                {children}
-                <BasicPopover />
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={12}>
+                  {children}
+                  <BasicPopover />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </body>
-      </ThemeProviderWrapper>
-      <GoogleAdSense />
-    </html>
+        <GoogleAdSense />
+      </html>
+    </ThemeProviderWrapper>
   );
 }

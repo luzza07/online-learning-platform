@@ -1,30 +1,25 @@
 import React from "react";
-import { Box, Grid, Typography, Link, IconButton } from "@mui/material";
-import { Facebook, Twitter, YouTube, LinkedIn } from "@mui/icons-material";
+import { Box, Grid, Typography, Link, IconButton, useTheme, useMediaQuery } from "@mui/material";
+import { Facebook, YouTube, LinkedIn } from "@mui/icons-material";
 
 const Footer = () => {
+  
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
-        backgroundColor: "white", // White background
-        color: "#333", // Darker text for better contrast
+        backgroundColor: theme.palette.background.paper,
+        color: theme.palette.text.primary, 
         padding: "3rem 2rem",
-        borderTop: "1px solid #ddd", // Light gray border
+        borderTop: `1px solid ${theme.palette.divider}`, 
         mt: "auto",
       }}
     >
-      <Grid
-        container
-        spacing={6} // Proper spacing between sections
-        justifyContent="space-between"
-      >
+      <Grid container spacing={6} justifyContent="space-between">
         {/* Catalog Section */}
         <Grid item xs={12} sm={4}>
-          <Typography
-            variant="h6"
-            gutterBottom
-            sx={{ color: "#000", fontWeight: "bold" }}
-          >
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
             Catalog
           </Typography>
           {[
@@ -37,17 +32,14 @@ const Footer = () => {
             "System Design and Distributed Systems",
             "E-Governance and Information Systems",
           ].map((item, index) => (
-            <Typography
-              key={index}
-              sx={{ marginBottom: "0.5rem", fontSize: "0.9rem" }}
-            >
+            <Typography key={index} sx={{ marginBottom: "0.5rem", fontSize: "0.9rem" }}>
               <Link
                 href="#"
                 color="inherit"
                 underline="hover"
                 sx={{
                   display: "inline-block",
-                  "&:hover": { color: "#1976d2" }, // Blue hover effect
+                  "&:hover": { color: theme.palette.primary.main }, 
                 }}
               >
                 ➔ {item}
@@ -58,11 +50,7 @@ const Footer = () => {
 
         {/* Map Location Section */}
         <Grid item xs={12} sm={4}>
-          <Typography
-            variant="h6"
-            gutterBottom
-            sx={{ color: "#000", fontWeight: "bold" }}
-          >
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
             Our Office
           </Typography>
           <Box
@@ -71,7 +59,7 @@ const Footer = () => {
               height: "200px",
               borderRadius: "8px",
               overflow: "hidden",
-              border: "1px solid #ccc",
+              border: `1px solid ${theme.palette.divider}`, 
               marginBottom: "1rem",
             }}
           >
@@ -84,18 +72,14 @@ const Footer = () => {
               loading="lazy"
             ></iframe>
           </Box>
-          <Typography sx={{ marginBottom: "0.5rem" }}>
-            Jwagal, Lalitpur, Nepal
-          </Typography>
-          <Typography sx={{ marginBottom: "0.5rem" }}>
-            Phone: +977-9840143772
-          </Typography>
+          <Typography sx={{ marginBottom: "0.5rem" }}>Jwagal, Lalitpur, Nepal</Typography>
+          <Typography sx={{ marginBottom: "0.5rem" }}>Phone: +977-9840143772</Typography>
           <Typography>
             Email:{" "}
             <Link
               href="mailto:info@infographytech.com"
               color="inherit"
-              sx={{ "&:hover": { color: "#1976d2" } }}
+              sx={{ "&:hover": { color: theme.palette.primary.main } }}
             >
               info@infographytech.com
             </Link>
@@ -104,64 +88,44 @@ const Footer = () => {
 
         {/* About Section */}
         <Grid item xs={12} sm={4}>
-          <Typography
-            variant="h6"
-            gutterBottom
-            sx={{ color: "#000", fontWeight: "bold" }}
-          >
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
             About
           </Typography>
           {["About Us", "Contact Us", "FAQ"].map((item, index) => (
-            <Typography
-              key={index}
-              sx={{ marginBottom: "0.5rem", fontSize: "0.9rem" }}
-            >
+            <Typography key={index} sx={{ marginBottom: "0.5rem", fontSize: "0.9rem" }}>
               <Link
                 href="#"
                 color="inherit"
                 underline="hover"
                 sx={{
                   display: "inline-block",
-                  "&:hover": { color: "#1976d2" }, // Blue hover effect
+                  "&:hover": { color: theme.palette.primary.main },
                 }}
               >
                 ➔ {item}
               </Link>
             </Typography>
           ))}
-          <Box
-            sx={{
-              marginTop: "1rem",
-              display: "flex",
-              gap: "1rem",
-            }}
-          >
+          <Box sx={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
             <Typography>Support Us</Typography>
             <IconButton
               href="https://www.facebook.com/InfographyTechnologies"
               color="inherit"
-              sx={{
-                "&:hover": { color: "#3b5998" }, // Facebook blue
-              }}
+              sx={{ "&:hover": { color: "#3b5998" } }}
             >
               <Facebook />
             </IconButton>
             <IconButton
               href="https://www.youtube.com/@easyexplanation9220"
               color="inherit"
-              sx={{
-                "&:hover": { color: "#FF0000" }, // YouTube red
-              }}
+              sx={{ "&:hover": { color: "#FF0000" } }}
             >
               <YouTube />
             </IconButton>
-           
             <IconButton
               href="https://www.linkedin.com/company/infographytechnologies/"
               color="inherit"
-              sx={{
-                "&:hover": { color: "#0A66C2" }, // LinkedIn blue
-              }}
+              sx={{ "&:hover": { color: "#0A66C2" } }}
             >
               <LinkedIn />
             </IconButton>
@@ -175,7 +139,7 @@ const Footer = () => {
         sx={{
           textAlign: "center",
           marginTop: "3rem",
-          color: "#757575",
+          color: theme.palette.text.secondary, 
           fontSize: "0.85rem",
         }}
       >

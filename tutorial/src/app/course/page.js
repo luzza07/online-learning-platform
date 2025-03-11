@@ -7,6 +7,7 @@ import Footer from "../components/footer";
 export default function CourseListPage() {
   return (
     <Box>
+      
       <SloganCarousel />
       <CourseList />
       <Footer />

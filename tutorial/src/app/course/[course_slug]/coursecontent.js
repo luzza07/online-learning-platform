@@ -10,7 +10,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-import axiosInstance from "@/app/utility/tools";
+import axiosInstance from "../../utility/tools";
 
 export default function CourseContentPage({ courseSlug }) {
   // console.log(params);

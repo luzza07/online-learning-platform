@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import axiosInstance from "../utility/tools";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 
 export default function CourseList() {
   const [courses, setCourses] = useState([]);

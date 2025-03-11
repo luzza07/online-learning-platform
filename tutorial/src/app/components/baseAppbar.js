@@ -16,17 +16,19 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import axiosInstance from "../utility/tools"; 
+import { useTheme } from "@mui/material/styles"; // ✅ Import MUI theme hook
+import axiosInstance from "../utility/tools";
 import ThemeToggle from "./ThemeToggle";
 
 const pages = ["COURSES", "NEC LICENSE", "YOUTUBE"];
 const pageLinks = [
-  "course",
+  "/course",
   "/neclicense",
   "https://www.youtube.com/@easyexplanation9220",
 ];
 
 export default function BaseAppBar() {
+  const theme = useTheme(); // ✅ Get current theme
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [courseDestinations, setCourseDestinations] = useState({});
@@ -62,12 +64,12 @@ export default function BaseAppBar() {
   const handleSearchSubmit = () => {
     if (searchQuery.trim() !== "") {
       const query = searchQuery.trim().toLowerCase();
-  
+
       // Fuzzy match: Find the first course that includes the query in its title
       const matchedCourse = Object.entries(courseDestinations).find(([title]) =>
         title.includes(query)
       );
-  
+
       if (matchedCourse) {
         const [, destination] = matchedCourse;
         router.push(destination); // Navigate to the matched course page
@@ -76,7 +78,6 @@ export default function BaseAppBar() {
       }
     }
   };
-  
 
   const handleNavMenuOpen = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -90,9 +91,9 @@ export default function BaseAppBar() {
     <AppBar
       position="fixed"
       sx={{
-        backgroundColor: "white", // Plain white background
-        color: "black", // Black text
-        boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1)", // Minimal shadow
+        backgroundColor: theme.palette.background.default, // ✅ Dynamic background color
+        color: theme.palette.text.primary, // ✅ Dynamic text color
+        boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.1)",
       }}
     >
       <Container maxWidth="xl">
@@ -118,7 +119,7 @@ export default function BaseAppBar() {
               href="/"
               sx={{
                 fontWeight: "bold",
-                color: "black",
+                color: theme.palette.text.primary, // ✅ Dynamic text color
                 textDecoration: "none",
                 letterSpacing: 1.2,
               }}
@@ -160,9 +161,7 @@ export default function BaseAppBar() {
                   key={page}
                   onClick={() => {
                     handleNavMenuClose();
-                    router.push(
-                      page === "YouTube" ? pageLinks[index] : `/${pageLinks[index]}`
-                    );
+                    router.push(pageLinks[index]);
                   }}
                 >
                   <Typography textAlign="center">{page}</Typography>
@@ -171,7 +170,7 @@ export default function BaseAppBar() {
             </Menu>
           </Box>
 
-          {/* Desktop Menu - Centered Items */}
+          {/* Desktop Menu */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -182,20 +181,21 @@ export default function BaseAppBar() {
             {pages.map((page, index) => (
               <Button
                 key={page}
-                onClick={() =>
-                  router.push(
-                    page === "YouTube" ? pageLinks[index] : pageLinks[index]
-                  )
-                }
+                onClick={() => router.push(pageLinks[index])}
                 sx={{
                   my: 2,
-                  color: "black", // Black text
+                  color: theme.palette.text.primary, // ✅ Dynamic text color
                   fontWeight: "medium",
                   fontSize: "1rem",
                   marginLeft: 2,
                   marginRight: 2,
-                  textTransform: "none", // Keeps text simple without uppercase
-                  "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.05)" }, // Light hover effect
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor:
+                      theme.palette.mode === "light"
+                        ? "rgba(0, 0, 0, 0.05)"
+                        : "rgba(255, 255, 255, 0.1)", // ✅ Different hover effect for dark mode
+                  },
                 }}
               >
                 {page}
@@ -203,7 +203,7 @@ export default function BaseAppBar() {
             ))}
           </Box>
 
-          {/* Search Bar on the Right */}
+          {/* Search Bar */}
           <Box sx={{ display: "flex", justifyContent: "flex-end", flexGrow: 0 }}>
             <TextField
               variant="outlined"
@@ -220,19 +220,23 @@ export default function BaseAppBar() {
                 ),
               }}
               sx={{
-                backgroundColor: "#f5f5f5", // Light gray for search bar
+                backgroundColor:
+                  theme.palette.mode === "light"
+                    ? "#f5f5f5"
+                    : "rgba(255, 255, 255, 0.1)", // ✅ Dynamic background for search bar
                 borderRadius: 2,
                 width: { xs: "100%", sm: "300px" },
                 "& .MuiOutlinedInput-root": {
                   "&:hover fieldset": {
-                    borderColor: "#cccccc",
+                    borderColor: theme.palette.divider, // ✅ Dynamic border color
                   },
                 },
               }}
             />
-            
           </Box>
-          <ThemeToggle/>
+
+          {/* Theme Toggle */}
+          <ThemeToggle />
         </Toolbar>
       </Container>
     </AppBar>

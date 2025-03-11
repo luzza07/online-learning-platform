@@ -1,217 +1,347 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
+import { styled } from '@mui/material/styles';
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import Drawer from "@mui/material/Drawer";
+import Grid from "@mui/material/Grid2";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
+import Drawer from "@mui/material/Drawer";
+import Link from "next/link";
 import AdjustIcon from "@mui/icons-material/Adjust";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { useTheme, useMediaQuery } from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion";
-import Footer from "@/app/components/footer";
-import axiosInstance from "@/app/utility/tools";
+import Footer from "../../../../components/footer";
+import axiosInstance from "../../../../utility/tools";
+import { use } from "react";
+import Button from "@mui/material/Button";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-export default function CourseLayout({ children }) {
+export default function CourseLayout({ children, params: paramsPromise }) {
+  const params = use(paramsPromise);
   const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const params = useParams();
-  
-  const [open, setOpen] = useState(!isMobile);
   const [subjectTopic, setSubjectTopic] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState(null);
   const [subjectDetail, setSubjectDetail] = useState(null);
-  const [expandedChapters, setExpandedChapters] = useState({});
-  const [currentTopicIndex, setCurrentTopicIndex] = useState(null);
-
-  // Fetch data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const topicsResponse = await axiosInstance.get(`/topic/by/subject/${params.course_slug}/`);
-        setSubjectTopic(topicsResponse.data);
-
-        const subjectResponse = await axiosInstance.get(`/subjects/detail/${params.course_slug}/`);
-        setSubjectDetail(subjectResponse.data);
-        
-        // Find current topic index
-        if (params.topic_slug) {
-          const allTopics = topicsResponse.data.flat();
-          const currentIndex = allTopics.findIndex((topic) => topic.slug === params.topic_slug);
-          setCurrentTopicIndex(currentIndex);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    if (params.course_slug) {
-      fetchData();
+  const StyledContentWrapper = styled(Box)(({ theme }) => ({
+    '& p, & h1, & h2, & h3, & h4, & h5, & h6, & li, & a, & span, & div': {
+      color: `${theme.palette.mode === 'dark' ? theme.palette.text.primary : theme.palette.text.secondary} !important`,
+    },
+    '& *': {
+      color: 'inherit'
     }
-  }, [params.course_slug, params.topic_slug]);
+  }));
 
-  // Toggle drawer
-  const toggleDrawer = () => setOpen(!open);
+  const currentTopicIndex = subjectTopic
+    .flatMap((chapter) => chapter.topic)
+    .findIndex((topic) => topic.slug === params.topic_slug);
 
-  // Toggle chapter expansion
-  const toggleChapter = (chapterId) => {
-    setExpandedChapters((prev) => ({
-      ...prev,
-      [chapterId]: !prev[chapterId],
-    }));
+  const allTopics = subjectTopic.flatMap((chapter) => chapter.topic);
+  const nextTopic = allTopics[currentTopicIndex + 1];
+  const prevTopic = allTopics[currentTopicIndex - 1];
+
+  const handleTopicClick = (topic) => {
+    setSelectedTopic(topic.uid);
   };
 
-  // Get previous and next topics
-  const previousTopic = currentTopicIndex !== null && currentTopicIndex > 0
-    ? subjectTopic.flat()[currentTopicIndex - 1]
-    : null;
-  const nextTopic = currentTopicIndex !== null && currentTopicIndex < subjectTopic.flat().length - 1
-    ? subjectTopic.flat()[currentTopicIndex + 1]
-    : null;
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
+  const fetchData = () => {
+    axiosInstance
+      .get(`/topic/by/subject/${params.course_slug}/`)
+      .then((response) => {
+        setSubjectTopic(response.data);
+        console.log("Subject topic data:", response.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching subject topics:", error);
+      });
+
+    axiosInstance
+      .get(`/subjects/detail/${params.course_slug}/`)
+      .then((response) => {
+        setSubjectDetail(response.data);
+      })
+      .catch((error) => {
+        console.log("Error fetching subject details:", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [params.course_slug]);
+
+  useEffect(() => {
+    if (subjectTopic && subjectTopic.length > 0) {
+      console.log(
+        "Subject Topic Structure:",
+        JSON.stringify(subjectTopic, null, 2)
+      );
+    }
+  }, [subjectTopic]);
+
+  const drawerContent = (
+    <Box
+      sx={{ width: isMobile ? 250 : 300, padding: 2 }}
+      role="presentation"
+      onClick={isMobile ? toggleDrawer(false) : null}
+    >
+      {subjectDetail && subjectDetail.length > 0 && (
+        <Link
+          style={{
+            color:
+              theme.palette.mode === "dark"
+                ? theme.palette.primary.light
+                : "#3f51b5",
+            fontWeight: "bold",
+            fontSize: "2rem",
+            padding: "10px 20px",
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? theme.palette.background.default
+                : "#e3f2fd",
+            borderRadius: "8px",
+            textDecoration: "none",
+            display: "inline-block",
+            textAlign: "center",
+          }}
+          href={`/course/${subjectDetail[0]?.slug}`}
+        >
+          {subjectDetail[0]?.title
+            ? subjectDetail[0].title.toLocaleUpperCase()
+            : "COURSE"}
+        </Link>
+      )}
+      <List>
+        {subjectTopic &&
+          subjectTopic.map((chapter, index) => {
+            if (!chapter || !chapter.topic || !chapter.topic.length) {
+              return (
+                <div key={index}>
+                  <ListItem>
+                    <ListItemText
+                      primary={
+                        <Typography color="textPrimary">
+                          Chapter information unavailable
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                  <Divider style={{ margin: "1rem 0" }} />
+                </div>
+              );
+            }
+
+            return (
+              <div key={index}>
+                <ListItem style={{ display: "flex", alignItems: "center" }}>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        variant="h6"
+                        style={{
+                          fontWeight: "bold",
+                          color:
+                            theme.palette.mode === "dark"
+                              ? theme.palette.primary.light
+                              : "#3f51b5",
+                          margin: 0,
+                        }}
+                      >
+                        {chapter.title || "Untitled Chapter"}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+
+                {/* Topics under this chapter */}
+                <ListItem
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "8px",
+                  }}
+                >
+                  {chapter.topic.map((topic, topicIndex) => (
+                    <Link
+                      key={topicIndex}
+                      href={`/course/content/${params.course_slug}/${topic.slug}`}
+                      style={{
+                        textDecoration: "none",
+                        color:
+                          params.topic_slug === topic.slug
+                            ? theme.palette.mode === "dark"
+                              ? theme.palette.primary.light
+                              : "#3f51b5"
+                            : theme.palette.mode === "dark"
+                            ? theme.palette.text.secondary
+                            : "#555",
+                        backgroundColor:
+                          params.topic_slug === topic.slug
+                            ? theme.palette.mode === "dark"
+                              ? theme.palette.background.paper
+                              : "#e8eaf6"
+                            : theme.palette.mode === "dark"
+                            ? theme.palette.background.default
+                            : "#f5f5f5",
+                        borderRadius: "4px",
+                        padding: "6px 12px",
+                        transition: "background-color 0.3s ease",
+                        display: "inline-flex",
+                        alignItems: "center",
+                      }}
+                      onClick={() => handleTopicClick(topic)}
+                    >
+                      {params.topic_slug === topic.slug ? (
+                        <Box display="flex" alignItems="center">
+                          <AdjustIcon
+                            sx={{
+                              mr: 1,
+                              color:
+                                theme.palette.mode === "dark"
+                                  ? theme.palette.primary.light
+                                  : "#3f51b5",
+                            }}
+                          />
+                          <Typography
+                            variant="body1"
+                            style={{
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {topic.title
+                              ? topic.title.toLocaleUpperCase()
+                              : "NO TITLE"}
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <Typography variant="body1">
+                          {topic.title
+                            ? topic.title.toLocaleUpperCase()
+                            : "NO TITLE"}
+                        </Typography>
+                      )}
+                    </Link>
+                  ))}
+                </ListItem>
+                <Divider style={{ margin: "1rem 0" }} />
+              </div>
+            );
+          })}
+      </List>
+    </Box>
+  );
 
   return (
-    <>
-      <AppBar position="fixed" sx={{ backgroundColor: "#3f51b5", zIndex: theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          {isMobile && (
-            <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer}>
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Typography variant="h6" component="h1" sx={{ flexGrow: 1 }}>
-            {subjectDetail ? subjectDetail[0]?.title.toUpperCase() : "Loading..."}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Box sx={{ display: "flex", marginTop: "64px" }}>
-        {/* Sidebar */}
-        <Drawer
-          variant={isMobile ? "temporary" : "persistent"}
-          open={open}
-          onClose={toggleDrawer}
+    <Box sx={{ flexGrow: 1, marginTop: 0 }}>
+      {isMobile && (
+        <AppBar
+          position="static"
           sx={{
-            "& .MuiDrawer-paper": {
-              width: isMobile ? 250 : 300,
-              boxSizing: "border-box",
-              marginTop: "64px",
-            },
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? theme.palette.background.default
+                : "#3f51b5",
           }}
         >
-          <Box sx={{ width: "100%", padding: 2 }}>
-            {subjectDetail && (
-              <Link
-                href={`/course/${subjectDetail[0]?.slug}`}
-                style={{
-                  color: "#3f51b5",
-                  fontWeight: "bold",
-                  fontSize: "1.5rem",
-                  padding: "10px 20px",
-                  backgroundColor: "#e3f2fd",
-                  borderRadius: "8px",
-                  textDecoration: "none",
-                  display: "block",
-                  textAlign: "center",
-                  marginBottom: "1rem",
-                }}
+          <Toolbar>
+            {isMobile && (
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+                onClick={toggleDrawer(true)}
               >
-                {subjectDetail[0]?.title.toUpperCase()}
-              </Link>
+                <MenuIcon />
+              </IconButton>
             )}
-            <List>
-              {subjectTopic.map((topics, index) => {
-                const chapterId = topics[0]?.chapter.uid;
-                const isExpanded = expandedChapters[chapterId] || false;
+          </Toolbar>
+        </AppBar>
+      )}
 
-                return (
-                  <div key={index}>
-                    <ListItem button onClick={() => toggleChapter(chapterId)}>
-                      <ListItemText
-                        primary={
-                          <Typography variant="h6" sx={{ fontWeight: "bold", color: "#3f51b5" }}>
-                            {topics[0]?.chapter.title}
-                          </Typography>
-                        }
-                      />
-                      {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </ListItem>
+      <Box sx={{ flexFlow: 1 }}>
+        <Grid container spacing={2}>
+          <Grid size={{ md: 3, sx: 12, sm: 12 }}>
+            <Drawer
+              variant={isMobile ? "temporary" : "permanent"}
+              open={isMobile ? open : true}
+              onClose={toggleDrawer(false)}
+              sx={{
+                "& .MuiDrawer-paper": {
+                  width: 350,
+                  boxSizing: "border-box",
+                  marginTop: 4,
+                  top: 64,
+                  backgroundColor:
+                    theme.palette.mode === "dark"
+                      ? theme.palette.background.default
+                      : "#fff",
+                },
+              }}
+            >
+              {drawerContent}
+            </Drawer>
+          </Grid>
+          <Grid
+            size={{ md: 8, sx: 12, sm: 12 }}
+            sx={{
+              flexGrow: 1,
+              padding: 3,
+              marginLeft: isMobile ? 0 : "350px", // Offset content for drawer width on desktop
+              height: "calc(100vh - 64px)", // Full height minus AppBar height
+              overflowY: "auto", // Make content scrollable
+              backgroundColor:
+                theme.palette.mode === "dark"
+                  ? theme.palette.background.default
+                  : "#fff",
+              color:
+                theme.palette.mode === "dark"
+                  ? theme.palette.text.primary
+                  : "#000",
+            }}
+          >
+            {/* Next and Previous Buttons */}
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+            >
+              <Button
+                variant="contained"
+                startIcon={<ArrowBackIcon />}
+                disabled={!prevTopic}
+                component={Link}
+                href={`/course/content/${params.course_slug}/${prevTopic?.slug}`}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="contained"
+                endIcon={<ArrowForwardIcon />}
+                disabled={!nextTopic}
+                component={Link}
+                href={`/course/content/${params.course_slug}/${nextTopic?.slug}`}
+              >
+                Next
+              </Button>
+            </Box>
 
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                        >
-                          {topics.map((topic, topicIndex) => (
-                            <Link
-                              key={topicIndex}
-                              href={`/course/content/${params.course_slug}/${topic.slug}`}
-                              style={{
-                                textDecoration: "none",
-                                color: params.topic_slug === topic.slug ? "#3f51b5" : "#555",
-                                backgroundColor: params.topic_slug === topic.slug ? "#e8eaf6" : "#f5f5f5",
-                                borderRadius: "4px",
-                                padding: "8px 16px",
-                                display: "block",
-                                margin: "4px 0",
-                              }}
-                            >
-                              <AdjustIcon sx={{ mr: 1, color: params.topic_slug === topic.slug ? "#3f51b5" : "#555" }} />
-                              {topic.title.toUpperCase()}
-                            </Link>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    <Divider sx={{ my: 1 }} />
-                  </div>
-                );
-              })}
-            </List>
-          </Box>
-        </Drawer>
-
-        {/* Main Content Area */}
-        <Box sx={{ flexGrow: 1, padding: 3, marginLeft: isMobile ? 0 : "300px" }}>
-          {children}
-
-          {/* Navigation Buttons */}
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-            {previousTopic ? (
-              <Link href={`/course/content/${params.course_slug}/${previousTopic.slug}`}>
-                <Button variant="contained" color="primary">
-                  ← {previousTopic.title.toUpperCase()}
-                </Button>
-              </Link>
-            ) : (
-              <Box />
-            )}
-
-            {nextTopic ? (
-              <Link href={`/course/content/${params.course_slug}/${nextTopic.slug}`}>
-                <Button variant="contained" color="primary">
-                  {nextTopic.title.toUpperCase()} →
-                </Button>
-              </Link>
-            ) : (
-              <Box />
-            )}
-          </Box>
-
-          <Footer />
-        </Box>
+            <StyledContentWrapper>{children}</StyledContentWrapper>
+            <Footer />
+          </Grid>
+        </Grid>
       </Box>
-    </>
+    </Box>
   );
 }

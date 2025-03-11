@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardMedia, Typography, Box } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import axiosInstance from "../utility/tools";
+import { useTheme } from "@mui/material/styles"; // Import useTheme hook
 
 export default function YouTubeVideoGallery() {
   const [youtubeUrls, setYoutubeUrls] = useState([]);
+  const theme = useTheme(); // Use the useTheme hook to access the current theme
 
   const fetchData = () => {
     axiosInstance
@@ -28,7 +30,7 @@ export default function YouTubeVideoGallery() {
         alignItems: "center",
         marginTop: 8,
         padding: 3,
-        backgroundColor: "#f5f5f5",
+        backgroundColor: theme.palette.background.paper, // Use theme's background color
         borderRadius: 2,
       }}
     >

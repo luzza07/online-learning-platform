@@ -1,81 +1,121 @@
+/* Global Variables */
+:root {
+  --font-geist-sans: 'Roboto', sans-serif;
+  --font-geist-mono: 'Courier New', monospace;
+  --background: #ffffff;
+  --foreground: #000000;
+
+  /* Light Mode */
+  --gray-rgb-light: 0, 0, 0;
+  --gray-alpha-200-light: rgba(var(--gray-rgb-light), 0.08);
+  --gray-alpha-100-light: rgba(var(--gray-rgb-light), 0.05);
+
+  --button-primary-hover-light: #383838;
+  --button-secondary-hover-light: #f2f2f2;
+
+  /* Dark Mode */
+  --gray-rgb-dark: 255, 255, 255;
+  --gray-alpha-200-dark: rgba(var(--gray-rgb-dark), 0.145);
+  --gray-alpha-100-dark: rgba(var(--gray-rgb-dark), 0.06);
+
+  --button-primary-hover-dark: #ccc;
+  --button-secondary-hover-dark: #1a1a1a;
+}
+
+body {
+  font-family: var(--font-geist-sans);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Main Page Layout */
 .page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-
   display: grid;
   grid-template-rows: 20px 1fr 20px;
   align-items: center;
   justify-items: center;
-  min-height: 100svh;
+  min-height: 100vh;
   padding: 80px;
   gap: 64px;
   font-family: var(--font-geist-sans);
+  transition: background-color 0.3s ease-in-out;
 }
 
 @media (prefers-color-scheme: dark) {
   .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
+    background-color: #121212; /* Dark background for dark mode */
   }
 }
 
+/* Main Content */
 .main {
   display: flex;
   flex-direction: column;
   gap: 32px;
   grid-row-start: 2;
+  width: 100%;
+  text-align: center;
+  color: var(--foreground); /* Ensure text uses foreground color */
 }
 
+/* Ordered List (for tutorials, steps) */
 .main ol {
   font-family: var(--font-geist-mono);
   padding-left: 0;
   margin: 0;
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 1rem;
+  line-height: 1.8;
   letter-spacing: -0.01em;
   list-style-position: inside;
+  color: var(--foreground); /* Ensure text uses foreground color */
 }
 
+/* List Item Styling */
 .main li:not(:last-of-type) {
   margin-bottom: 8px;
 }
 
+/* Code Styling */
 .main code {
   font-family: inherit;
-  background: var(--gray-alpha-100);
-  padding: 2px 4px;
+  background: var(--gray-alpha-100-light);
+  padding: 4px 8px;
   border-radius: 4px;
   font-weight: 600;
+  color: var(--foreground); /* Ensure text uses foreground color */
 }
 
+@media (prefers-color-scheme: dark) {
+  .main code {
+    background: var(--gray-alpha-100-dark);
+    color: var(--foreground); /* Ensure text uses foreground color */
+  }
+}
+
+/* CTA Buttons */
 .ctas {
   display: flex;
   gap: 16px;
+  justify-content: center;
 }
 
 .ctas a {
   appearance: none;
-  border-radius: 128px;
+  border-radius: 50px;
   height: 48px;
-  padding: 0 20px;
-  border: none;
+  padding: 0 24px;
   border: 1px solid transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  line-height: 20px;
   font-weight: 500;
+  text-transform: uppercase;
 }
 
 a.primary {
@@ -85,14 +125,44 @@ a.primary {
 }
 
 a.secondary {
-  border-color: var(--gray-alpha-200);
-  min-width: 180px;
+  background: transparent;
+  color: var(--foreground);
+  border-color: var(--gray-alpha-200-light);
 }
 
+@media (prefers-color-scheme: dark) {
+  a.primary {
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  a.secondary {
+    background: transparent;
+    color: var(--foreground);
+    border-color: var(--gray-alpha-200-dark);
+  }
+}
+
+/* Hover Effects */
+@media (hover: hover) and (pointer: fine) {
+  a.primary:hover {
+    background: var(--button-primary-hover-light);
+    border-color: transparent;
+  }
+
+  a.secondary:hover {
+    background: var(--button-secondary-hover-light);
+    border-color: transparent;
+  }
+}
+
+/* Footer Styling */
 .footer {
   grid-row-start: 3;
   display: flex;
   gap: 24px;
+  justify-content: center;
+  align-items: center;
 }
 
 .footer a {
@@ -105,28 +175,12 @@ a.secondary {
   flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
+/* Media Queries */
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-}
-
+/* Mobile Layout */
 @media (max-width: 600px) {
   .page {
-    padding: 32px;
-    padding-bottom: 80px;
+    padding: 40px 20px;
   }
 
   .main {
@@ -135,10 +189,12 @@ a.secondary {
 
   .main ol {
     text-align: center;
+    font-size: 1rem;
   }
 
   .ctas {
     flex-direction: column;
+    gap: 12px;
   }
 
   .ctas a {
@@ -158,8 +214,41 @@ a.secondary {
   }
 }
 
+/* Tablet Layout */
+@media (max-width: 768px) {
+  .page {
+    padding: 60px;
+  }
+
+  .main {
+    gap: 24px;
+  }
+
+  .ctas a {
+    font-size: 16px;
+  }
+}
+
+/* Dark Mode Tweaks */
 @media (prefers-color-scheme: dark) {
+  .footer a {
+    color: var(--foreground);
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
   .logo {
-    filter: invert();
+    filter: invert(1);
+  }
+
+  .main {
+    color: var(--foreground); /* Ensure text uses foreground color */
+  }
+
+  .main ol, .main li {
+    color: var(--foreground); /* Ensure text uses foreground color */
   }
 }
