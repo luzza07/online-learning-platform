@@ -17,13 +17,14 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "@mui/material/styles";
 import axiosInstance from "../utility/tools";
 import ThemeToggle from "./ThemeToggle";
 
-const pages = ["COURSES", "NEC LICENSE", "YOUTUBE"];
+const pages = ["HOME", "COURSES", "NEC LICENSE", "YOUTUBE"];
 const pageLinks = [
+  "/",
   "/course",
   "/neclicense",
   "https://www.youtube.com/@easyexplanation9220",
@@ -31,7 +32,7 @@ const pageLinks = [
 
 export default function BaseAppBar() {
   const theme = useTheme();
-  const [anchorElNav, setAnchorElNav] = useState(null);
+  const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
   const [courseDestinations, setCourseDestinations] = useState({});
   const router = useRouter();
@@ -139,12 +140,13 @@ export default function BaseAppBar() {
                   textTransform: "none",
                   borderRadius: "8px",
                   padding: "6px 16px",
-                  transition: "background-color 0.3s",
+                  transition: "border-bottom 0.3s ease-in-out",
+                  borderBottom:
+                    pathname === pageLinks[index]
+                      ? `2px solid ${theme.palette.primary.main}`
+                      : "none",
                   "&:hover": {
-                    backgroundColor:
-                      theme.palette.mode === "light"
-                        ? "rgba(0, 0, 0, 0.05)"
-                        : "rgba(255, 255, 255, 0.1)",
+                    borderBottom: `2px solid ${theme.palette.primary.main}`,
                   },
                 }}
               >
