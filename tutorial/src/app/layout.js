@@ -3,21 +3,20 @@ import localFont from "next/font/local";
 import BaseAppBar from "./components/baseAppbar";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-
-import Head from "next/head";
 import AdBanner from "./components/adbanner";
 import GoogleAdSense from "./components/adsense";
 import GoogleAnalytics from "./components/googleanalytics";
-
 import "./globals.css";
 import { ThemeProviderWrapper } from "./context/ThemeContext";
 import BasicPopover from "./components/popover";
+import { QuizContextProvider } from "./quiz/QuizContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -36,30 +35,47 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children, params }) {
+export default function RootLayout({ children }) {
+  // Check if components exist before rendering
+  const hasGoogleAnalytics = typeof GoogleAnalytics === 'function';
+  const hasAdBanner = typeof AdBanner === 'function';
+  const hasBaseAppBar = typeof BaseAppBar === 'function';
+  const hasBasicPopover = typeof BasicPopover === 'function';
+  const hasGoogleAdSense = typeof GoogleAdSense === 'function';
+  
   return (
     <ThemeProviderWrapper>
       <html lang="en">
-        <GoogleAnalytics />
+        <head>
+          {/* In Next.js App Router, you don't need a Head component */}
+          <title>{metadata.title}</title>
+          <meta name="description" content={metadata.description} />
+          <meta name="keywords" content={metadata.keywords} />
+          <meta name="author" content={metadata.author} />
+          <link rel="icon" href={metadata.icons.icon} />
+        </head>
+        {hasGoogleAnalytics && <GoogleAnalytics />}
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <AdBanner />
+          {hasAdBanner && <AdBanner />}
           <Grid container spacing={2} rowSpacing={4}>
             <Grid item xs={12} sx={{ marginBottom: 6 }}>
               <Box>
-                <BaseAppBar />
+                {hasBaseAppBar && <BaseAppBar />}
               </Box>
             </Grid>
             <Grid item xs={12}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12} md={12}>
-                  {children}
-                  <BasicPopover />
+                  <QuizContextProvider>
+                    {children}
+                  </QuizContextProvider>
+                  {hasBasicPopover && <BasicPopover />}
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
         </body>
-        <GoogleAdSense />
+        {hasGoogleAdSense && <GoogleAdSense />}
       </html>
     </ThemeProviderWrapper>
   );
