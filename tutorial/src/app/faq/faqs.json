@@ -1,0 +1,206 @@
+[
+  {
+    "question": "How do I manage my account?",
+    "answer": "You can manage your account by logging into the platform, navigating to the 'Profile' section, and updating your personal information, password, and notification preferences."
+  },
+  {
+    "question": "How do I sign up for courses?",
+    "answer": "To sign up for a course, browse the course catalog, select the course you want to take, and click the 'Enroll' button."
+  },
+  {
+    "question": "Can I track my course progress?",
+    "answer": "Yes, you can track your progress within each course through the 'My Courses' section."
+  },
+  {
+    "question": "What is the course API and how does it work?",
+    "answer": "The course API allows you to programmatically interact with course data such as enrollment, progress tracking, and course content."
+  },
+  {
+    "question": "How are quizzes and assignments handled?",
+    "answer": "Quizzes and assignments are integrated into each course and can be completed online. Your progress is automatically tracked."
+  },
+  {
+    "question": "Can I watch video lectures on the platform?",
+    "answer": "Yes, video lectures are available for all enrolled courses and can be accessed anytime."
+  },
+  {
+    "question": "How can I use the media player for video lectures?",
+    "answer": "The media player allows you to control playback (play, pause, volume, speed, subtitles)."
+  },
+  {
+    "question": "Where can I find the FAQ and contact us section?",
+    "answer": "You can find the FAQ and contact section at the bottom of every page."
+  },
+  {
+    "question": "How does the AI-powered chatbot work?",
+    "answer": "The AI-powered chatbot is available in the sidebar to provide real-time assistance with common queries."
+  },
+  {
+    "question": "How can I get support if I need help?",
+    "answer": "You can contact us via the 'Contact Us' form or chat with the AI-powered chatbot."
+  },
+  {
+    "question": "How do I reset my password?",
+    "answer": "To reset your password, click on the 'Forgot Password' link on the login page and follow the instructions."
+  },
+  {
+    "question": "Are there any prerequisites to take a course?",
+    "answer": "Prerequisites for each course are listed on the course description page. Some courses may require basic knowledge of specific topics."
+  },
+  {
+    "question": "How do I submit assignments?",
+    "answer": "Assignments can be submitted directly through the course page. You will be able to upload files or enter text, depending on the assignment type."
+  },
+  {
+    "question": "Can I review the course materials after completing the course?",
+    "answer": "Yes, you can always revisit course materials, including video lectures, quizzes, and assignments, after completing a course."
+  },
+  {
+    "question": "How do I communicate with instructors?",
+    "answer": "You can communicate with instructors through course discussion boards or private messages, which are accessible in the course interface."
+  },
+  {
+    "question": "How are grades calculated?",
+    "answer": "Grades are calculated based on your performance in quizzes, assignments, and exams. Your overall score is shown in the 'Grades' section of the course."
+  },
+  {
+    "question": "Can I take courses offline?",
+    "answer": "At this time, courses must be completed online. However, you can download certain resources like PDFs for offline use."
+  },
+  {
+    "question": "Do you offer certifications for completed courses?",
+    "answer": "Yes, after completing a course, you will receive a certificate of completion that can be shared or downloaded."
+  },
+  {
+    "question": "Can I access the platform from any device?",
+    "answer": "Yes, the platform is accessible on desktop and mobile devices via a web browser."
+  },
+  {
+    "question": "How do I withdraw from a course?",
+    "answer": "To withdraw from a course, go to your 'My Courses' section and select the 'Withdraw' option next to the course."
+  },
+  {
+    "question": "Can I access the course materials after the course ends?",
+    "answer": "Yes, you can access the course materials anytime after the course ends."
+  },
+  {
+    "question": "How do I check my course grades?",
+    "answer": "Grades are available in the 'Grades' section of each course, where you can view your scores for quizzes and assignments."
+  },
+  {
+    "question": "Are there any live sessions in the courses?",
+    "answer": "Some courses may offer live sessions as part of the curriculum. Check the course description for more details."
+  },
+  {
+    "question": "How do I get a refund for a course?",
+    "answer": "Refunds are available within a specified period after enrollment. Please refer to our refund policy for more information."
+  },
+  {
+    "question": "Can I transfer to another course?",
+    "answer": "You can transfer to another course depending on availability and eligibility. Please contact support for assistance."
+  },
+  {
+    "question": "How do I update my email address?",
+    "answer": "To update your email address, go to the 'Profile' section and modify your email settings."
+  },
+  {
+    "question": "Can I take multiple courses at once?",
+    "answer": "Yes, you can enroll in and take multiple courses at the same time, depending on your schedule and learning pace."
+  },
+  {
+    "question": "Can I interact with other students?",
+    "answer": "Yes, many courses have forums or discussion boards where you can interact with other students."
+  },
+  {
+    "question": "How can I access my course progress?",
+    "answer": "You can track your course progress from the 'My Courses' section, where you will find your completed lessons and assessments."
+  },
+  {
+    "question": "How do I receive my certificate of completion?",
+    "answer": "Once you complete all course requirements, your certificate will be available in the 'Certificates' section for download."
+  },
+  {
+    "question": "How do I change my password?",
+    "answer": "To change your password, go to your 'Profile' settings and update your password."
+  },
+  {
+    "question": "Can I share my course certificate on social media?",
+    "answer": "Yes, you can share your course certificate directly on social media platforms after downloading it."
+  },
+  {
+    "question": "What types of courses are available?",
+    "answer": "We offer a wide range of courses, including programming, data science, design, business, and more."
+  },
+  {
+    "question": "How do I get notifications for new courses?",
+    "answer": "You can enable notifications in your profile settings to be notified when new courses are available."
+  },
+  {
+    "question": "How do I enroll in a course if it's full?",
+    "answer": "You can join the waitlist for a course, and you will be notified when a spot becomes available."
+  },
+  {
+    "question": "Can I change my course schedule?",
+    "answer": "Some courses allow you to change your schedule. Please refer to the course details or contact support for assistance."
+  },
+  {
+    "question": "Can I download course materials?",
+    "answer": "Yes, you can download certain resources such as PDF files, slides, and other materials from the course."
+  },
+  {
+    "question": "What should I do if I experience technical issues?",
+    "answer": "If you encounter any technical issues, please reach out to our support team or consult the help center for troubleshooting steps."
+  },
+  {
+    "question": "How do I use the discussion boards?",
+    "answer": "To participate in discussion boards, go to the 'Discussions' tab within the course and post your questions or comments."
+  },
+  {
+    "question": "Can I skip lessons in a course?",
+    "answer": "Some courses allow you to skip lessons, but it's recommended to follow the course structure for optimal learning."
+  },
+  {
+    "question": "How are assignments graded?",
+    "answer": "Assignments are graded automatically or manually by the instructor based on the submission requirements."
+  },
+  {
+    "question": "What happens if I miss a live session?",
+    "answer": "If you miss a live session, you can often access a recording of the session in the course materials section."
+  },
+  {
+    "question": "How do I request a transcript?",
+    "answer": "You can request a transcript by contacting the support team or through the 'Transcript Request' option in your profile."
+  },
+  {
+    "question": "How do I delete my account?",
+    "answer": "To delete your account, please contact customer support for assistance."
+  },
+  {
+    "question": "How do I connect with alumni?",
+    "answer": "You can connect with alumni through the course discussion boards, social media groups, or alumni networks."
+  },
+  {
+    "question": "Can I get feedback on my assignments?",
+    "answer": "Yes, instructors typically provide feedback on assignments through the course platform."
+  },
+  {
+    "question": "Can I retake a quiz?",
+    "answer": "You can retake a quiz in most courses. Please check the course policy for retaking quizzes."
+  },
+  {
+    "question": "How do I add a course to my wishlist?",
+    "answer": "To add a course to your wishlist, click the 'Add to Wishlist' button on the course page."
+  },
+  {
+    "question": "How do I check the course prerequisites?",
+    "answer": "Course prerequisites are listed on the course description page. Be sure to check them before enrolling."
+  },
+  {
+    "question": "Can I transfer my course credits?",
+    "answer": "Course credits may be transferable depending on the institution and course type. Please contact support for more information."
+  },
+  {
+    "question": "How do I change the course language?",
+    "answer": "If the course offers multiple languages, you can change the language in the course settings."
+  }
+]
