@@ -32,6 +32,8 @@ export default function CourseLayout({ children, params: paramsPromise }) {
   const [subjectTopic, setSubjectTopic] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [subjectDetail, setSubjectDetail] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
+
   const StyledContentWrapper = styled(Box)(({ theme }) => ({
     '& p, & h1, & h2, & h3, & h4, & h5, & h6, & li, & a, & span, & div': {
       color: `${theme.palette.mode === 'dark' ? theme.palette.text.primary : theme.palette.text.secondary} !important`,
@@ -58,6 +60,7 @@ export default function CourseLayout({ children, params: paramsPromise }) {
   };
 
   const fetchData = () => {
+    setLoading(true); // Start loading
     axiosInstance
       .get(`/topic/by/subject/${params.course_slug}/`)
       .then((response) => {
@@ -72,9 +75,11 @@ export default function CourseLayout({ children, params: paramsPromise }) {
       .get(`/subjects/detail/${params.course_slug}/`)
       .then((response) => {
         setSubjectDetail(response.data);
+        setLoading(false); // Stop loading after data is fetched
       })
       .catch((error) => {
         console.log("Error fetching subject details:", error);
+        setLoading(false); // Stop loading even if there's an error
       });
   };
 
@@ -82,14 +87,13 @@ export default function CourseLayout({ children, params: paramsPromise }) {
     fetchData();
   }, [params.course_slug]);
 
-  useEffect(() => {
-    if (subjectTopic && subjectTopic.length > 0) {
-      console.log(
-        "Subject Topic Structure:",
-        JSON.stringify(subjectTopic, null, 2)
-      );
-    }
-  }, [subjectTopic]);
+  if (loading) {
+    return <Typography>Loading...</Typography>; // Show a loading indicator
+  }
+
+  if (!subjectTopic || subjectTopic.length === 0) {
+    return <Typography>No topics available.</Typography>; // Fallback if no data
+  }
 
   const drawerContent = (
     <Box
@@ -274,7 +278,8 @@ export default function CourseLayout({ children, params: paramsPromise }) {
 
       <Box sx={{ flexFlow: 1 }}>
         <Grid container spacing={2}>
-          <Grid size={{ md: 3, sx: 12, sm: 12 }}>
+          {/* Left Sidebar */}
+          <Grid item xs={12} md={3}>
             <Drawer
               variant={isMobile ? "temporary" : "permanent"}
               open={isMobile ? open : true}
@@ -295,50 +300,116 @@ export default function CourseLayout({ children, params: paramsPromise }) {
               {drawerContent}
             </Drawer>
           </Grid>
-          <Grid
-            size={{ md: 8, sx: 12, sm: 12 }}
-            sx={{
-              flexGrow: 1,
-              padding: 3,
-              marginLeft: isMobile ? 0 : "350px", // Offset content for drawer width on desktop
-              height: "calc(100vh - 64px)", // Full height minus AppBar height
-              overflowY: "auto", // Make content scrollable
-              backgroundColor:
-                theme.palette.mode === "dark"
-                  ? theme.palette.background.default
-                  : "#fff",
-              color:
-                theme.palette.mode === "dark"
-                  ? theme.palette.text.primary
-                  : "#000",
-            }}
-          >
-            {/* Next and Previous Buttons */}
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
-            >
-              <Button
-                variant="contained"
-                startIcon={<ArrowBackIcon />}
-                disabled={!prevTopic}
-                component={Link}
-                href={`/course/content/${params.course_slug}/${prevTopic?.slug}`}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="contained"
-                endIcon={<ArrowForwardIcon />}
-                disabled={!nextTopic}
-                component={Link}
-                href={`/course/content/${params.course_slug}/${nextTopic?.slug}`}
-              >
-                Next
-              </Button>
-            </Box>
 
-            <StyledContentWrapper>{children}</StyledContentWrapper>
-            <Footer />
+          {/* Main Content */}
+          <Grid item xs={12} md={6} sx={{ marginLeft: { md: "350px" }, marginRight: { md: "350px" } }}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                padding: 3,
+                height: "calc(100vh - 64px)", // Full height minus AppBar height
+                overflowY: "auto", // Make content scrollable
+                backgroundColor:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.background.default
+                    : "#fff",
+                color:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.text.primary
+                    : "#000",
+              }}
+            >
+              {/* Next and Previous Buttons */}
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+              >
+                <Button
+                  variant="contained"
+                  startIcon={<ArrowBackIcon />}
+                  disabled={!prevTopic}
+                  component={Link}
+                  href={`/course/content/${params.course_slug}/${prevTopic?.slug}`}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForwardIcon />}
+                  disabled={!nextTopic}
+                  component={Link}
+                  href={`/course/content/${params.course_slug}/${nextTopic?.slug}`}
+                >
+                  Next
+                </Button>
+              </Box>
+
+              <StyledContentWrapper>{children}</StyledContentWrapper>
+              <Footer />
+            </Box>
+          </Grid>
+
+          {/* Right Side - Recommended Video and Quiz Button */}
+          <Grid item xs={12} md={3} sx={{ position: "fixed", right: 0, top: 64, width: "350px", height: "calc(100vh - 64px)", overflowY: "auto" }}>
+            <Box
+              sx={{
+                padding: 3,
+                backgroundColor:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.background.paper
+                    : "#f5f5f5",
+                color:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.text.primary
+                    : "#000",
+              }}
+            >
+              {/* Recommended YouTube Video */}
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" gutterBottom>
+                  Recommended Video
+                </Typography>
+                <iframe
+                  width="100%"
+                  height="200"
+                  src="https://www.youtube.com/embed/93wuRtpftgY"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+                <iframe
+                  width="100%"
+                  height="200"
+                  src="https://www.youtube.com/embed/8JIlH4OAB_Q&list=PLYwrDCC_pg4F2CGFmMByWEWgIBQnk1vXM"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+                <iframe
+                  width="100%"
+                  height="200"
+                  src="https://www.youtube.com/embed/93wuRtpftgY"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </Box>
+
+              {/* Quiz Button */}
+              <Box sx={{ textAlign: "center" }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  href="/quiz"
+                  sx={{ fontSize: '1.2rem', padding: '10px 20px', width: '100%' }}
+                >
+                  Take Quiz
+                </Button>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
       </Box>
