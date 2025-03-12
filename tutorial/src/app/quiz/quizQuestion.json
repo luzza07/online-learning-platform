@@ -1,0 +1,118 @@
+ [
+      {
+        "question": "What is the size of `int` in C on a 32-bit system?",
+        "options": ["2 bytes", "4 bytes", "8 bytes", "Depends on the compiler"],
+        "correct_answer": "4 bytes",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "Which of the following is a valid identifier in C?",
+        "options": ["123var", "_varName", "var-name", "float"],
+        "correct_answer": "_varName",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "What is the output of `printf(\"%d\", 5/2);`?",
+        "options": ["2.5", "2", "3", "Error"],
+        "correct_answer": "2",
+        "difficulty": "Medium"
+      },
+      {
+        "question": "Which operator is used to allocate memory dynamically in C?",
+        "options": ["new", "malloc", "alloc", "create"],
+        "correct_answer": "malloc",
+        "difficulty": "Medium"
+      },
+      {
+        "question": "What will `sizeof(char)` return in C?",
+        "options": ["1", "2", "4", "8"],
+        "correct_answer": "1",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "Which of the following is not a valid storage class in C?",
+        "options": ["auto", "static", "register", "dynamic"],
+        "correct_answer": "dynamic",
+        "difficulty": "Medium"
+      },
+      {
+        "question": "What is the default return type of the `main` function in C?",
+        "options": ["int", "void", "float", "char"],
+        "correct_answer": "int",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "Which header file should be included to use `malloc` function in C?",
+        "options": ["<stdlib.h>", "<stdio.h>", "<malloc.h>", "<memory.h>"],
+        "correct_answer": "<stdlib.h>",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "Which loop is guaranteed to execute at least once?",
+        "options": ["for", "while", "do-while", "None of the above"],
+        "correct_answer": "do-while",
+        "difficulty": "Medium"
+      },
+      {
+        "question": "Which of the following is true about `void` pointers?",
+        "options": ["They cannot be dereferenced directly", "They can hold addresses of any type", "They require explicit typecasting", "All of the above"],
+        "correct_answer": "All of the above",
+        "difficulty": "Hard"
+      },
+      {
+        "question": "Which of the following correctly represents the format specifier for `double` in `printf`?",
+        "options": ["%lf", "%d", "%f", "%Lf"],
+        "correct_answer": "%lf",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "What will happen if a `break` statement is used inside a loop?",
+        "options": ["The loop continues execution", "The loop terminates immediately", "The program exits", "It causes an error"],
+        "correct_answer": "The loop terminates immediately",
+        "difficulty": "Medium"
+      },
+      {
+        "question": "What is the output of `printf(\"%d\", sizeof(int));` on a 64-bit system?",
+        "options": ["2", "4", "8", "Depends on the compiler"],
+        "correct_answer": "4",
+        "difficulty": "Medium"
+      },
+      {
+        "question": "Which keyword is used to prevent modification of a variable in C?",
+        "options": ["const", "static", "final", "volatile"],
+        "correct_answer": "const",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "Which function is used to read a string with spaces in C?",
+        "options": ["scanf", "gets", "fgets", "read"],
+        "correct_answer": "fgets",
+        "difficulty": "Medium"
+      },
+      {
+        "question": "What is the correct way to declare a pointer to an integer in C?",
+        "options": ["int ptr*;", "int *ptr;", "int &ptr;", "int ptr[];"],
+        "correct_answer": "int *ptr;",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "Which of the following statements is true for recursion in C?",
+        "options": ["It must have a base condition", "It can cause infinite loops", "It uses stack memory", "All of the above"],
+        "correct_answer": "All of the above",
+        "difficulty": "Hard"
+      },
+      {
+        "question": "What does `EOF` stand for in C?",
+        "options": ["End Of Function", "End Of File", "End Of Formatting", "None of the above"],
+        "correct_answer": "End Of File",
+        "difficulty": "Easy"
+      },
+      {
+        "question": "Which operator is used for bitwise AND in C?",
+        "options": ["&", "&&", "|", "||"],
+        "correct_answer": "&",
+        "difficulty": "Medium"
+      }
+    ]
+  
+  
