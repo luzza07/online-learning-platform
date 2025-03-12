@@ -44,7 +44,7 @@ function RootPage() {
           </Grid>
 
           {/* Top Courses Section */}
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={12} id="top-courses">
             <Slide direction="up" in={fadeIn} timeout={1000}>
               <Box>
                 <TopCourses />
