@@ -22,11 +22,11 @@ import { useTheme } from "@mui/material/styles";
 import axiosInstance from "../utility/tools";
 import ThemeToggle from "./ThemeToggle";
 
-const pages = ["HOME", "COURSES", "NEC LICENSE", "YOUTUBE"];
+const pages = ["HOME", "COURSES", "CONTACT US", "YOUTUBE"];
 const pageLinks = [
   "/",
   "/course",
-  "/neclicense",
+  "/contact",
   "https://www.youtube.com/@easyexplanation9220",
 ];
 
