@@ -29,7 +29,7 @@ export default function LoginForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (email === "admin@gmail.com" && password === "admin") {
-      router.push("/");
+      window.location.href = "http://localhost:3001/"; // Redirect to localhost:3001
     } else {
       console.log("Email:", email, "Password:", password);
     }

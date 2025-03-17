@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import axios from "axios";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([]);
@@ -12,7 +11,18 @@ export default function Chatbot() {
     setInput(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const getBotResponse = (userMessage) => {
+    const lowerCaseMessage = userMessage.toLowerCase();
+    if (lowerCaseMessage === "hello") {
+      return "Hello! How can I assist you today?";
+    } else if (lowerCaseMessage === "what is c programming") {
+      return "C is a powerful general-purpose programming language that is widely used for system programming, developing operating systems, and embedded systems.";
+    } else {
+      return "I'm a simple chatbot. I can only respond to 'hello' and 'what is C programming'!";
+    }
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -20,38 +30,13 @@ export default function Chatbot() {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setIsLoading(true);
 
-    try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-3.5-turbo", // You can change this to gpt-4 if needed
-          messages: [{ role: "user", content: input }],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const botResponse = response.data.choices[0].message.content;
-
+    setTimeout(() => {
+      const botResponse = getBotResponse(input);
       const assistantMessage = { role: "assistant", content: botResponse };
       setMessages((prevMessages) => [...prevMessages, assistantMessage]);
-    } catch (error) {
-      console.error("Error fetching OpenAI response:", error);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          role: "assistant",
-          content: "Sorry, I couldn't process your request.",
-        },
-      ]);
-    } finally {
       setIsLoading(false);
       setInput("");
-    }
+    }, 1000);
   };
 
   return (
